@@ -1,5 +1,6 @@
 //Express
 import { ChatOpenAI } from "@langchain/openai"
+
 const model = new ChatOpenAI({
 azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
 azureOpenAIApiVersion: process.env.OPENAI_API_VERSION,
