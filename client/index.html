@@ -7,16 +7,16 @@
     <script defer src="./main.js"></script>
 </head>
 <body>
-    <h1>Four big guys</h1>
-    <button id="promptGet">Krijg de k-</button>
+    <h1>Test</h1>
+    <button id="promptGet">Get prompt or some shit</button>
     <div id="result"></div>
     <hr>
-    <h2>And they-</h2>
-    <form id="customGameForm">
+    <h2>Voer je idee hier in</h2>
+    <form id="customGameForm" onsubmit="sendToAI()">
         <label for="prompt">Enter Prompt:</label>
         <input type="text" id="prompt" name="prompt" placeholder="Suckstarting a shotgun sounds nice about now"
                required>
-        <button type="submit">Open the game</button>
+        <button type="submit" id="submit">Open the game</button>
     </form>
     <div id="customGameResult"></div>
 </div>
