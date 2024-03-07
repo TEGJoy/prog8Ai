@@ -16,11 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // parse application/json
 app.use(express.json());
-const messages = [
-    ["system", "You're now a scottish worldbuilder who is slightly drunk from whiskey. You are tasked with creating a world that contains 5 items pertaining to the following theme:"],
-    ["human", "Fantasy"],
-    ["ai", ""]
-];
+const messages = [];
 
 
 app.use(cors())
@@ -28,14 +24,22 @@ app.use(cors())
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
-
+app.get('/', async (req,res) => {
+    const themes = ["fantasy", "future", "action", "horror", "anime"]
+    const theme = Math.floor(Math.random() * themes.length);
+    let engineeredPrompt = `You're now a scottish worldbuilder who is slightly drunk from whiskey. You are tasked with creating a world that contains 5 items pertaining to the following theme: ${themes[theme]}`;
+    messages.push(["system", engineeredPrompt])
+    const answer = await model.invoke(engineeredPrompt)
+    messages.push(["ai", answer.content]);
+    res.json(answer.content);
+})
 app.post('/', async (req,res) =>  {
     //let prompt = req.body.prompt;
-    console.log(req.body);
+    console.log(messages);
     const input = req.body.input;
-    let engineeredPrompt = `You're now a scottish worldbuilder who is slightly drunk from whiskey. You are tasked with creating a world that contains 5 items pertaining to the following theme: ${input}`;
-    console.log(engineeredPrompt);
-    const answer = await model.invoke(engineeredPrompt);
+    messages.push(["human", input]);
+    const answer = await model.invoke(messages);
+    messages.push(["ai", answer.content]);
     res.json(answer.content);
 })
 export default app

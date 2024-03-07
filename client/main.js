@@ -12,7 +12,8 @@ function handleForm(event) {
     } 
     } 
 form.addEventListener('submit', handleForm);
-
+let wakeUpButton = document.getElementById("promptGet");
+wakeUpButton.addEventListener('click', wakeUp);
 function myFunction(){
         if (seconds >0 ) 
         { 
@@ -23,6 +24,23 @@ function myFunction(){
         else  {
         document.getElementById('submit').style.backgroundColor='green';
         document.getElementById('submit').removeAttribute('disabled', false);
+    }
+}
+async function wakeUp(){
+    wakeUpButton.setAttribute('disabled', true);
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+        });
+        const result = await response.json();
+        const newContent = document.createTextNode(result);
+        const hr = document.createElement("hr");
+        document.getElementById('prompt').removeAttribute('disabled', false);
+        document.getElementById('submit').removeAttribute('disabled', false);
+        resultBox.appendChild(newContent);
+        resultBox.appendChild(hr);
+    } catch (error) {
+        console.error('Error:', error);
     }
 }
 async function sendToAI(){
@@ -42,6 +60,8 @@ async function sendToAI(){
     const result = await response.json();
     const newContent = document.createTextNode(result);
     resultBox.appendChild(newContent);
+    const hr = document.createElement("hr");
+    resultBox.appendChild(hr);
     console.log(input);
     console.log(result);
     }
