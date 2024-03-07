@@ -47,7 +47,7 @@ async function sendToAI(){
     let input = document.getElementById('prompt').value;
         //"prompt": prompt,
     try {
-    const response = await fetch(url, {
+    const response = await fetch(url + "/anthro", {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -69,3 +69,48 @@ async function sendToAI(){
         console.error('Error:', error);
       }
     }
+    async function wakeUp(){
+        wakeUpButton.setAttribute('disabled', true);
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+            });
+            const result = await response.json();
+            const newContent = document.createTextNode(result);
+            const hr = document.createElement("hr");
+            document.getElementById('prompt').removeAttribute('disabled', false);
+            document.getElementById('submit').removeAttribute('disabled', false);
+            document.getElementById('submit2').removeAttribute('disabled', false);
+            resultBox.appendChild(newContent);
+            resultBox.appendChild(hr);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    async function sendToAnthro(){
+        console.log("Ah yeah");
+        let input = document.getElementById('prompt').value;
+            //"prompt": prompt,
+        try {
+        const response = await fetch(url + "/anthro", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            body: JSON.stringify({
+                "input": input
+              }),
+        });
+        const result = await response.json();
+        const newContent = document.createTextNode(result);
+        resultBox.appendChild(newContent);
+        const hr = document.createElement("hr");
+        resultBox.appendChild(hr);
+        console.log(input);
+        console.log(result);
+        }
+        catch (error) {
+            console.error('Error:', error);
+          }
+        }
