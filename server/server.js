@@ -14,7 +14,7 @@ azureOpenAIApiVersion: process.env.OPENAI_API_VERSION,
 azureOpenAIApiInstanceName: process.env.INSTANCE_NAME,
 azureOpenAIApiDeploymentName: process.env.ENGINE_NAME,
 })
-
+let weatherkey = process.env.WEATHER_KEY
 const app = express()
 const port = 2000
 // parse application/x-www-form-urlencoded
@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 const messages = [];
 
-
+const messages2 = [];
 app.use(cors())
 // communicatie met Azure API
 app.listen(port, () => {
@@ -53,15 +53,17 @@ app.post('/anthro', async (req,res) =>  {
     //let prompt = req.body.prompt;
    
     const input = req.body.input;
-    messages.push(["user", input]);
-    messages.push(["system", "you're getting sligthly more drunk as  you take another drink of your whiskey."]);
+    messages2.push({"role":"user","content": input});
+    let cock = await fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php");
     const message = await anthropic.messages.create({
         max_tokens: 300,
-        messages: messages,
+        system: `You're a talking skeleton who is also very drunk from whiskey. Try to answer the questions as good as you can. You also give instructions about${cock}`,
+        messages: messages2,
         model: 'claude-3-opus-20240229',
       });
-    messages.push(["ai", message.content.text]);
-    res.json(message.content);
+    console.log(message);
+    messages2.push({"role": "assistant", "content": message.content[0].text});
+    res.json(message.content[0].text);
     //console.log(messages);
 })
 //https://docs.anthropic.com/claude/reference/rate-limits 
