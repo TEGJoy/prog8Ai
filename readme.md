@@ -1,0 +1,1 @@
+Je hebt geen .env dus je de calls werken natuurlijk niet. Alles staat in de call, dit is de code.
